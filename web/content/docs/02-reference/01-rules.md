@@ -48,7 +48,7 @@ All matchers must be satisfied for the rule to apply.
 | `approve` | `approve:` | The call is parked until a reviewer approves. |
 | `deny` | optional `reason:` | The call is refused. `parlok.Denied` is raised. |
 
-See [Decisions](/docs/decisions) for the full semantics.
+See [Decisions](/docs/reference/decisions) for the full semantics.
 
 ## Rule order
 

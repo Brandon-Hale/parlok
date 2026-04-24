@@ -49,6 +49,6 @@ The wrapped adapter has the same API surface as the underlying SDK. Your agent c
 
 ## What's next
 
-- [Rules](/docs/rules) — the YAML schema.
-- [Adapters](/docs/adapters) — built-in adapters and how to write your own.
-- [Decisions](/docs/decisions) — allow, rewrite, approve, deny.
+- [Rules](/docs/reference/rules) — the YAML schema.
+- [Adapters](/docs/reference/adapters) — built-in adapters and how to write your own.
+- [Decisions](/docs/reference/decisions) — allow, rewrite, approve, deny.
