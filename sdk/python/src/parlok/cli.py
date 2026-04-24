@@ -5,6 +5,7 @@ import sys
 from importlib.resources import files
 from pathlib import Path
 
+from . import __version__
 from .errors import PolicyError
 from .policy.engine import evaluate
 from .policy.loader import load_file
@@ -61,6 +62,12 @@ def _cmd_test(args) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="parlok")
+    parser.add_argument(
+        "--version",
+        "-V",
+        action="version",
+        version=f"parlok {__version__}",
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_init = sub.add_parser("init", help="write a starter policy file")
