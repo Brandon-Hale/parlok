@@ -68,6 +68,15 @@ button:disabled {
   animation: parlok-ring 2.2s ease-in-out infinite;
 }
 
+@keyframes parlok-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.parlok-caret {
+  animation: parlok-caret 1s step-end infinite;
+}
+
 /* Markdown prose styles for /docs */
 
 .docs-prose h2 {

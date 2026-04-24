@@ -1,6 +1,7 @@
 import { WaitlistForm } from "./WaitlistForm";
 import { HeroLanguageBadge } from "./HeroLanguageBadge";
 import { HeroDemo } from "./HeroDemo";
+import { TypingCycle } from "./TypingCycle";
 
 const FEATURES = ["2-line install", "framework-agnostic", "MIT licensed"];
 
@@ -40,13 +41,23 @@ export function Hero() {
             <br />
             for <em className="italic">agents.</em>
           </h1>
-          <p className="mt-8 text-lg text-[var(--color-muted)] max-w-xl leading-relaxed">
-            Stop bad tool calls{" "}
-            <span className="font-semibold text-[var(--color-ink)]">
-              before they happen.
-            </span>{" "}
-            A lightweight firewall for agent tools. Allow, rewrite, approve, or
-            deny every call, with rules you actually write.
+          <p className="mt-8 text-lg text-[var(--color-muted)] max-w-xl leading-relaxed min-h-[4.5em]">
+            <TypingCycle
+              words={[
+                "Stop bad tool calls before they happen.",
+                "Catch the wrong-channel blast at 3am.",
+                "Block DROP TABLE before it reaches prod.",
+                "Gate $50k refunds behind a human review.",
+                "Redact API keys before they leave the wire.",
+                "Rewrite the bad call, not the whole agent.",
+                "Every tool call, logged and auditable.",
+                "Ship agents you can actually sleep on.",
+              ]}
+              typeMs={32}
+              deleteMs={18}
+              holdMs={3800}
+              pauseMs={320}
+            />
           </p>
           <div className="mt-10 w-full max-w-lg">
             <WaitlistForm />
