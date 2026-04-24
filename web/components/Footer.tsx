@@ -21,6 +21,7 @@ const COLUMNS = [
     title: "Company",
     links: [
       { label: "github", href: "https://github.com/Brandon-Hale/parlok" },
+      { label: "linkedin", href: "https://www.linkedin.com/company/parlok" },
     ],
   },
 ];

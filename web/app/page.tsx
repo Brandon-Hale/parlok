@@ -15,8 +15,8 @@ export default function Page() {
         <Hero />
         <StatsStrip />
         <UseCases />
-        <CodeSnippet />
         <InstallSection />
+        <CodeSnippet />
         <Footer />
       </main>
     </LanguageProvider>

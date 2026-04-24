@@ -7,6 +7,7 @@ export type Step =
   | {
       number: string;
       title: string;
+      phase: string;
       caption: string;
       kind: "sdk";
       python: string;
@@ -15,6 +16,7 @@ export type Step =
   | {
       number: string;
       title: string;
+      phase: string;
       caption: string;
       kind: "yaml";
       yaml: string;
@@ -32,7 +34,7 @@ export function HowItWorksSteps({ steps }: { steps: Step[] }) {
         return (
           <li
             key={s.number}
-            className={`relative grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6 md:gap-14 pl-8 pr-0 ${
+            className={`relative grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 md:gap-14 pl-8 pr-0 ${
               last ? "pt-10" : "pt-10 pb-10"
             }`}
           >
@@ -41,7 +43,10 @@ export function HowItWorksSteps({ steps }: { steps: Step[] }) {
               className="absolute left-0 top-[2.9rem] -translate-x-1/2 w-2 h-2 rounded-full bg-[var(--color-ink)]"
             />
             <div>
-              <div className="flex items-baseline gap-3 font-mono text-sm">
+              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-muted)]">
+                {s.phase}
+              </div>
+              <div className="mt-2 flex items-baseline gap-3 font-mono text-sm">
                 <span className="text-[var(--color-muted)]">{s.number}</span>
                 <span className="text-[var(--color-accent)]">
                   {s.title.toLowerCase()}

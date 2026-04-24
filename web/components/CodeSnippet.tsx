@@ -52,7 +52,9 @@ export async function CodeSnippet() {
     {
       number: "01",
       title: "Wrap",
-      caption: "Wrap each adapter once. No framework swap, no new runtime.",
+      phase: "at startup · once",
+      caption:
+        "Point the firewall at your policy file and wrap each SDK. One line per adapter — your agent code never sees parlok.",
       kind: "sdk",
       python: pyWrap,
       typescript: tsWrap,
@@ -60,14 +62,18 @@ export async function CodeSnippet() {
     {
       number: "02",
       title: "Match",
-      caption: "Policies live in YAML, versioned in your repo, reviewed like code.",
+      phase: "on every tool call",
+      caption:
+        "Parlok walks the policy file top-to-bottom. The first policy whose match and when both apply wins. Unmatched calls fail closed.",
       kind: "yaml",
       yaml: yamlMatch,
     },
     {
       number: "03",
       title: "Decide",
-      caption: "Allow, rewrite, approve, or deny. Your agent code keeps running.",
+      phase: "what the adapter executes",
+      caption:
+        "One of four outcomes: allow sends as-is, rewrite scrubs PII and secrets first, approve blocks for a human, deny raises. Your code just gets the result.",
       kind: "sdk",
       python: pyRun,
       typescript: tsRun,
@@ -90,9 +96,9 @@ export async function CodeSnippet() {
         </div>
         <div className="flex md:items-end">
           <p className="font-mono text-sm text-[var(--color-muted)] leading-relaxed max-w-md">
-            You keep writing agent code the way you already do. Parlok sits
-            between the agent and its tools, reading policies that live in your
-            repo.
+            Wrap once at startup. Every tool call after that is matched against
+            your policy file and resolved into one of four decisions — allow,
+            rewrite, approve, deny. Your agent code never changes.
           </p>
         </div>
       </div>
