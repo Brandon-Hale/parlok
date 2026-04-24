@@ -1,31 +1,84 @@
-const cases = [
+import { codeToHtml } from "shiki";
+
+type Decision = "REWRITE" | "APPROVE" | "DENY";
+
+const cases: Array<{
+  name: string;
+  decision: Decision;
+  scenario: string;
+  rule: string;
+}> = [
   {
-    name: "messaging",
-    status: "v0",
-    headline: "Accidental blast to the wrong channel.",
-    body: "Agents write code, not judgment. Catch the #announce that should've been #internal.",
-    policy: `match:\n  adapter: [slack, email]\ndecision: approve`,
+    name: "safe_channels",
+    decision: "REWRITE",
+    scenario: "Accidental blast to the wrong channel.",
+    rule: `match:
+  adapter: slack
+  args.channel: "#announce-*"
+decision: rewrite
+rewrite:
+  args.channel: "#eng-test"`,
   },
   {
-    name: "refunds",
-    status: "v0.2",
-    headline: "A $50k refund from a hallucinated ticket.",
-    body: "Require human approval on any amount over a threshold. No more 3am surprises.",
-    policy: `when: metadata.amount > 50000\ndecision: approve`,
+    name: "high_value_refunds",
+    decision: "APPROVE",
+    scenario: "A $50k refund from a hallucinated ticket.",
+    rule: `match:
+  adapter: stripe.refunds
+  args.amount: ">= 10000"
+decision: approve
+approve:
+  reviewers: [brandon]`,
   },
   {
-    name: "db writes",
-    status: "v0.3",
-    headline: "DROP TABLE from a sloppy SQL tool call.",
-    body: "Block destructive schema changes in production. Full stop.",
-    policy: `match:\n  adapter: postgres\n  action: execute`,
+    name: "no_schema_drops",
+    decision: "DENY",
+    scenario: "DROP TABLE from a sloppy SQL tool call.",
+    rule: `match:
+  adapter: postgres
+  args.sql: "*DROP*"
+  args.env: prod
+decision: deny
+reason: "DROP forbidden in prod"`,
+  },
+  {
+    name: "redact_secrets",
+    decision: "REWRITE",
+    scenario: "API keys echoed back to the customer.",
+    rule: `match:
+  adapter: support
+  args.text: "*sk_live_*"
+decision: rewrite
+rewrite:
+  args.text: redact(args.text)`,
   },
 ];
 
-export function UseCases() {
+const BADGE: Record<Decision, string> = {
+  REWRITE: "bg-amber-700",
+  APPROVE: "bg-indigo-700",
+  DENY: "bg-red-900",
+};
+
+const DOT: Record<Decision, string> = {
+  REWRITE: "bg-amber-500",
+  APPROVE: "bg-indigo-500",
+  DENY: "bg-red-500",
+};
+
+export async function UseCases() {
+  const snippets = await Promise.all(
+    cases.map((c) =>
+      codeToHtml(c.rule, { lang: "yaml", theme: "github-light" }),
+    ),
+  );
+
   return (
-    <section id="scenarios" className="mx-auto max-w-6xl px-6 py-28 scroll-mt-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 mb-12">
+    <section
+      id="scenarios"
+      className="mx-auto max-w-6xl px-6 py-28 scroll-mt-16"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 mb-14">
         <div>
           <span className="font-mono text-xs tracking-widest uppercase text-[var(--color-muted)]">
             Real failure modes
@@ -35,34 +88,49 @@ export function UseCases() {
           </h2>
         </div>
         <div className="flex md:items-end">
-          <p className="text-base text-[var(--color-muted)] leading-relaxed max-w-md">
-            Every rule here is three lines of Python. No YAML, no policy
-            language, no vendor lock-in.
+          <p className="font-mono text-sm text-[var(--color-muted)] leading-relaxed max-w-md">
+            Every rule is a few lines of YAML. No custom DSL, no control plane,
+            no vendor lock-in.
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {cases.map((c) => (
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {cases.map((c, i) => (
           <div
             key={c.name}
-            className="border border-[var(--color-hairline)] rounded-lg p-6 bg-white flex flex-col"
+            className="rounded-lg border border-[var(--color-hairline)] bg-white overflow-hidden"
           >
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-mono text-sm text-[var(--color-accent)]">{c.name}</span>
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--color-muted)]">
-                {c.status}
+            <div className="flex items-center justify-between border-b border-[var(--color-hairline)] bg-[var(--color-surface)] px-4 py-2.5">
+              <div className="flex items-center gap-2 font-mono text-xs text-[var(--color-muted)]">
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${DOT[c.decision]}`}
+                  aria-hidden="true"
+                />
+                <span className="text-[var(--color-ink)]">{c.name}</span>
+                <span>.yaml</span>
+              </div>
+              <span
+                className={`rounded ${BADGE[c.decision]} text-white px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase`}
+              >
+                {c.decision.toLowerCase()}
               </span>
             </div>
-            <h3 className="font-semibold leading-snug mb-2">{c.headline}</h3>
-            <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-5">{c.body}</p>
-            <pre className="mt-auto font-mono text-[11px] leading-relaxed bg-[var(--color-surface)] border border-[var(--color-hairline)] rounded-md p-3 whitespace-pre overflow-x-auto">
-              {c.policy}
-            </pre>
+            <div className="px-5 pt-4 pb-5">
+              <p className="font-mono text-xs text-[var(--color-muted)] mb-4">
+                {c.scenario}
+              </p>
+              <div
+                className="font-mono text-[12.5px] leading-relaxed overflow-x-auto [&_pre]:!bg-transparent [&_pre]:!m-0"
+                dangerouslySetInnerHTML={{ __html: snippets[i] }}
+              />
+            </div>
           </div>
         ))}
       </div>
-      <p className="mt-6 text-xs text-[var(--color-muted)]">
-        Messaging ships in v0. Refunds and DB writes follow.
+
+      <p className="mt-6 font-mono text-xs text-[var(--color-muted)]">
+        More scenarios ship as we go.
       </p>
     </section>
   );

@@ -1,84 +1,24 @@
 import { codeToHtml } from "shiki";
-import { InstallSectionView, type InstallTab } from "./InstallSectionView";
+import { InstallSectionView } from "./InstallSectionView";
 
-type ByLang = {
-  python: { code: string; lang: "bash" | "python" };
-  typescript: { code: string; lang: "bash" | "typescript" };
-};
-
-const SAMPLES: Record<InstallTab, ByLang> = {
-  install: {
-    python: {
-      lang: "bash",
-      code: `$ pip install parlok
+const PYTHON = `$ pip install parlok
 # → collecting parlok-0.1.0 …
 # → installed parlok-0.1.0
 $ parlok init
-# → created parlok.rules.py
-# → ready.`,
-    },
-    typescript: {
-      lang: "bash",
-      code: `$ npm install parlok
+# → created parlok.yaml
+# → ready.`;
+
+const TYPESCRIPT = `$ npm install parlok
 # → added parlok@0.1.0
 $ npx parlok init
-# → created parlok.rules.ts
-# → ready.`,
-    },
-  },
-  wrap: {
-    python: {
-      lang: "python",
-      code: `from parlok import Firewall
-from parlok.adapters.slack import SlackAdapter
-
-fw = Firewall.from_file("parlok.rules.py")
-slack = fw.wrap(SlackAdapter(token=os.environ["SLACK_TOKEN"]))`,
-    },
-    typescript: {
-      lang: "typescript",
-      code: `import { Firewall } from "parlok";
-import { SlackAdapter } from "parlok/adapters/slack";
-
-const fw = await Firewall.fromFile("parlok.rules.ts");
-const slack = fw.wrap(new SlackAdapter({ token: process.env.SLACK_TOKEN! }));`,
-    },
-  },
-  run: {
-    python: {
-      lang: "python",
-      code: `# Same API as the Slack SDK. Now policy-checked.
-await slack.chat_postMessage(channel="#sales", text="Closed a deal")`,
-    },
-    typescript: {
-      lang: "typescript",
-      code: `// Same API as the Slack SDK. Now policy-checked.
-await slack.chatPostMessage({ channel: "#sales", text: "Closed a deal" });`,
-    },
-  },
-};
-
-async function renderAll() {
-  const tabs: InstallTab[] = ["install", "wrap", "run"];
-  const out = {} as Record<InstallTab, { python: string; typescript: string }>;
-  for (const t of tabs) {
-    const [py, ts] = await Promise.all([
-      codeToHtml(SAMPLES[t].python.code, {
-        lang: SAMPLES[t].python.lang,
-        theme: "github-light",
-      }),
-      codeToHtml(SAMPLES[t].typescript.code, {
-        lang: SAMPLES[t].typescript.lang,
-        theme: "github-light",
-      }),
-    ]);
-    out[t] = { python: py, typescript: ts };
-  }
-  return out;
-}
+# → created parlok.yaml
+# → ready.`;
 
 export async function InstallSection() {
-  const snippets = await renderAll();
+  const [python, typescript] = await Promise.all([
+    codeToHtml(PYTHON, { lang: "bash", theme: "github-light" }),
+    codeToHtml(TYPESCRIPT, { lang: "bash", theme: "github-light" }),
+  ]);
 
   return (
     <section id="install" className="mx-auto max-w-6xl px-6 py-28 scroll-mt-16">
@@ -110,7 +50,7 @@ export async function InstallSection() {
             </a>
           </div>
         </div>
-        <InstallSectionView snippets={snippets} />
+        <InstallSectionView snippets={{ python, typescript }} />
       </div>
     </section>
   );
