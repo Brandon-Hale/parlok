@@ -23,3 +23,12 @@ html, body {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
+
+@keyframes parlok-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.35); }
+}
+
+.parlok-pulse {
+  animation: parlok-pulse 1.6s ease-in-out infinite;
+}

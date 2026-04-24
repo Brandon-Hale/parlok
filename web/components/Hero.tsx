@@ -32,7 +32,7 @@ function CheckIcon() {
 export function Hero() {
   return (
     <section className="mx-auto max-w-6xl px-6 pt-20 pb-24">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
         <div className="flex flex-col items-start">
           <HeroLanguageBadge />
           <h1 className="font-serif text-6xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[var(--color-ink)]">
@@ -67,7 +67,7 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="lg:pt-2">
+        <div>
           <HeroDemo />
         </div>
       </div>
