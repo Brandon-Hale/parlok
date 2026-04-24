@@ -5,33 +5,30 @@ export function NavBar() {
     <header className="sticky top-0 z-40 border-b border-[var(--color-hairline)] bg-[var(--color-surface)]/80 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-surface)]/70">
       <nav className="relative mx-auto max-w-6xl px-6 h-14 flex items-center justify-between">
         <a
-          href="#"
+          href="/"
           className="font-mono text-sm text-[var(--color-ink)] inline-flex items-center gap-2"
         >
           <LogoMark size={14} />
           parlok
         </a>
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-7 font-mono text-sm text-[var(--color-muted)] whitespace-nowrap">
-          <a href="#how-it-works" className="hover:text-[var(--color-ink)] transition">
+          <a href="/#how-it-works" className="hover:text-[var(--color-ink)] transition">
             how it works
           </a>
-          <a href="#scenarios" className="hover:text-[var(--color-ink)] transition">
+          <a href="/#scenarios" className="hover:text-[var(--color-ink)] transition">
             scenarios
           </a>
-          <a href="#install" className="hover:text-[var(--color-ink)] transition">
+          <a href="/#install" className="hover:text-[var(--color-ink)] transition">
             install
           </a>
-          <a
-            href="#"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-[var(--color-ink)] transition"
-          >
+          <a href="/docs" className="hover:text-[var(--color-ink)] transition">
             docs
           </a>
         </div>
         <a
           href="https://github.com/Brandon-Hale/parlok"
+          target="_blank"
+          rel="noreferrer noopener"
           className="font-mono text-sm inline-flex items-center gap-2 rounded-md border border-[var(--color-hairline)] bg-white px-3 py-1.5 text-[var(--color-ink)] hover:border-[var(--color-ink)]/30 transition"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

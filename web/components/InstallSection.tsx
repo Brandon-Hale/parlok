@@ -44,6 +44,8 @@ export async function InstallSection() {
             </a>
             <a
               href="https://github.com/Brandon-Hale/parlok"
+              target="_blank"
+              rel="noreferrer noopener"
               className="font-mono text-xs text-[var(--color-muted)] hover:text-[var(--color-ink)] transition"
             >
               view on github →

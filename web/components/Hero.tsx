@@ -53,6 +53,8 @@ export function Hero() {
           </div>
           <a
             href="https://github.com/Brandon-Hale/parlok"
+            target="_blank"
+            rel="noreferrer noopener"
             className="mt-5 font-mono text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)] transition"
           >
             star on github →

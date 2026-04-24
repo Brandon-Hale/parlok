@@ -24,6 +24,23 @@ html, body {
   outline-offset: 2px;
 }
 
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled),
+[role="tab"]:not(:disabled),
+[role="option"]:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 @keyframes parlok-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.55; transform: scale(1.35); }
@@ -49,4 +66,158 @@ html, body {
 
 .parlok-ring {
   animation: parlok-ring 2.2s ease-in-out infinite;
+}
+
+/* Markdown prose styles for /docs */
+
+.docs-prose h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  color: var(--color-ink);
+}
+
+.docs-prose h3 {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-muted);
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.docs-prose h4 {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-ink);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.docs-prose p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-ink);
+  margin-bottom: 1rem;
+}
+
+.docs-prose strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.docs-prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.docs-prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.docs-prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--color-ink);
+}
+
+.docs-prose pre {
+  border: 1px solid var(--color-hairline);
+  border-radius: 8px;
+  background: #fff !important;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+
+.docs-prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+}
+
+.docs-prose ul,
+.docs-prose ol {
+  margin: 1rem 0 1.25rem;
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+
+.docs-prose ul {
+  list-style: disc;
+}
+
+.docs-prose ol {
+  list-style: decimal;
+}
+
+.docs-prose li {
+  margin-bottom: 0.35rem;
+}
+
+.docs-prose li::marker {
+  color: var(--color-muted);
+}
+
+.docs-prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+  margin: 2.5rem 0;
+}
+
+.docs-prose blockquote {
+  border-left: 2px solid var(--color-hairline);
+  padding: 0.25rem 0 0.25rem 1rem;
+  color: var(--color-muted);
+  margin: 1.25rem 0;
+  font-style: italic;
+}
+
+.docs-prose blockquote p {
+  margin: 0;
+}
+
+.docs-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.docs-prose th,
+.docs-prose td {
+  border: 1px solid var(--color-hairline);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.docs-prose th {
+  background: var(--color-surface);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.docs-prose td {
+  color: var(--color-ink);
+}
+
+.docs-prose h2:first-child,
+.docs-prose h3:first-child,
+.docs-prose p:first-child {
+  margin-top: 0;
 }

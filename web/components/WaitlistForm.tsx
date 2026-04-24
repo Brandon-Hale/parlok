@@ -53,7 +53,7 @@ export function WaitlistForm() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
           disabled={status === "loading"}
-          className="flex-1 min-w-0 px-4 py-2 bg-transparent font-mono text-sm placeholder:text-[var(--color-muted)] outline-none disabled:opacity-60"
+          className="flex-1 min-w-0 px-4 py-2 bg-transparent font-mono text-sm placeholder:text-[var(--color-muted)] outline-none focus:outline-none focus-visible:outline-none disabled:opacity-60"
         />
         <button
           type="submit"

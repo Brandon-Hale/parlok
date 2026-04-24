@@ -4,27 +4,22 @@ const COLUMNS = [
   {
     title: "Product",
     links: [
-      { label: "how it works", href: "#" },
-      { label: "scenarios", href: "#" },
-      { label: "pricing", href: "#" },
-      { label: "changelog", href: "#" },
+      { label: "how it works", href: "/#how-it-works" },
+      { label: "scenarios", href: "/#scenarios" },
     ],
   },
   {
     title: "Docs",
     links: [
-      { label: "quickstart", href: "#" },
-      { label: "rules api", href: "#" },
-      { label: "integrations", href: "#" },
-      { label: "recipes", href: "#" },
+      { label: "introduction", href: "/docs/introduction" },
+      { label: "getting started", href: "/docs/getting-started" },
+      { label: "rules", href: "/docs/rules" },
+      { label: "adapters", href: "/docs/adapters" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "about", href: "#" },
-      { label: "security", href: "#" },
-      { label: "contact", href: "#" },
       { label: "github", href: "https://github.com/Brandon-Hale/parlok" },
     ],
   },
@@ -50,16 +45,22 @@ export function Footer() {
                 {col.title}
               </div>
               <ul className="mt-4 space-y-1.5">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      className="font-mono text-sm text-[var(--color-ink)] hover:text-[var(--color-accent)] transition"
-                    >
-                      {l.label}
-                    </a>
-                  </li>
-                ))}
+                {col.links.map((l) => {
+                  const external = /^https?:\/\//.test(l.href);
+                  return (
+                    <li key={l.label}>
+                      <a
+                        href={l.href}
+                        {...(external
+                          ? { target: "_blank", rel: "noreferrer noopener" }
+                          : {})}
+                        className="font-mono text-sm text-[var(--color-ink)] hover:text-[var(--color-accent)] transition"
+                      >
+                        {l.label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
