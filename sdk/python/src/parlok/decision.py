@@ -17,4 +17,8 @@ class Decision:
     payload: dict[str, Any] = field(default_factory=dict)
 
     def apply_rewrite(self, call):
-        raise NotImplementedError("Rewrite transforms land in v0.1")
+        specs = self.payload.get("transforms") or []
+        if not specs:
+            return call
+        from .policy.transforms import apply_transforms
+        return apply_transforms(call, specs)

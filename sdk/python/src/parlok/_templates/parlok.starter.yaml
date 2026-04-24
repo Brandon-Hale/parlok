@@ -1,0 +1,19 @@
+version: 1
+allowed_domains: []
+policies:
+  - name: redact-pii-on-external
+    match:
+      adapter: [slack, email]
+    decision: rewrite
+    transforms: [redact_pii, redact_secrets, clamp_length(2000)]
+
+  - name: block-drop-table
+    match:
+      adapter: postgres
+      action: execute
+    when: body.matches("(?i)\\bdrop\\s+table\\b")
+    decision: deny
+    reason: "Destructive schema change blocked."
+
+  - name: allow-everything-else
+    decision: allow

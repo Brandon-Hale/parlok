@@ -1,5 +1,5 @@
-import pytest
 from parlok.decision import Decision
+from parlok.toolcall import ToolCall
 
 
 def test_decision_minimal_construction():
@@ -16,7 +16,7 @@ def test_decision_with_reason_and_payload():
     assert d.payload == {"hour": 23}
 
 
-def test_decision_apply_rewrite_not_implemented():
+def test_decision_apply_rewrite_noop_when_no_transforms():
     d = Decision(kind="rewrite")
-    with pytest.raises(NotImplementedError, match="v0.1"):
-        d.apply_rewrite(call=None)
+    c = ToolCall(adapter="x", action="y", body="hi")
+    assert d.apply_rewrite(c) is c

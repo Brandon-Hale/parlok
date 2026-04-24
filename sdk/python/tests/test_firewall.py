@@ -1,4 +1,3 @@
-import pytest
 from parlok.firewall import Firewall
 from parlok.adapter import Adapter
 from parlok.toolcall import ToolCall
@@ -25,12 +24,14 @@ def test_firewall_instantiates_with_config():
     assert fw is not None
 
 
-def test_firewall_from_file_raises_not_implemented():
-    with pytest.raises(NotImplementedError, match="v0.1"):
-        Firewall.from_file("firewall.yaml")
+def test_firewall_from_file_loads_policies(tmp_path):
+    p = tmp_path / "policy.yaml"
+    p.write_text("version: 1\npolicies:\n  - name: x\n    decision: allow\n")
+    fw = Firewall.from_file(p)
+    assert fw is not None
 
 
-def test_firewall_wrap_raises_not_implemented():
+def test_firewall_wrap_returns_wrapper():
     fw = Firewall()
-    with pytest.raises(NotImplementedError, match="v0.1"):
-        fw.wrap(FakeAdapter())
+    wrapped = fw.wrap(FakeAdapter())
+    assert wrapped is not None

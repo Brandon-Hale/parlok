@@ -2,7 +2,7 @@
 
 **Guardrails for agents.** A lightweight runtime firewall that wraps agent tool calls and evaluates each one against declarative policies before it executes.
 
-> **Status:** `v0.0.1` — skeleton. Public shape is fixed; the policy engine, YAML loader, and working adapters land in `v0.1`. Everything non-trivial currently raises `NotImplementedError` with a pointer to the version it ships in.
+> **Status:** `v0.1.0` — first usable cut. YAML policy engine, rewrite/approve/deny outcomes, Slack `chat_postMessage` adapter end-to-end, human-in-the-loop approvers (Slack Block Kit card + generic webhook), SQLite state store + audit log, `parlok init/lint/test` CLI.
 
 ---
 
@@ -154,19 +154,19 @@ policies:
 
 ---
 
-## What works today (`v0.0.1`)
+## What works today (`v0.1.0`)
 
-- `import parlok` — clean import, no side effects.
-- `parlok.__version__ == "0.0.1"`.
-- `parlok.__all__` exposes `Adapter`, `ToolCall`, `Decision`, `DecisionKind`, `Firewall`.
-- `ToolCall(...)` and `Decision(...)` construct as dataclasses with the documented fields.
-- `Adapter` is an ABC — subclasses must implement `normalise` and `execute` to instantiate.
-- `Firewall()` and `Firewall(config={...})` construct successfully.
-- `Firewall.from_file(...)` raises `NotImplementedError("YAML loader lands in v0.1")`.
-- `Firewall().wrap(adapter)` raises `NotImplementedError("wrap() lands in v0.1")`.
-- `Decision(kind="rewrite").apply_rewrite(call=...)` raises `NotImplementedError("Rewrite transforms land in v0.1")`.
+- **Policy file + loader.** `Firewall.from_file("parlok.yaml")` — YAML schema validation, unknown-key rejection, per-policy `match` / `when` / `decision` / `transforms` / `via` / `reason`.
+- **Policy engine.** First-match-wins evaluation; unmatched calls fail closed (`deny`).
+- **`when:` mini-expression language.** Dotted field access, comparison, `and` / `or` / `not`, `in`, regex via `body.matches("...")`. No arbitrary Python.
+- **Rewrite transforms.** `redact_pii`, `redact_secrets` (AWS / GitHub / Slack / Bearer / JWT shapes), `clamp_length(n)`, `strip_urls`, `tone_check`, `enforce_template(pattern)`.
+- **Approve triggers.** `external_recipient`, `contains_keywords([...])`, `financial_mention()`, `vip_recipient`, `after_hours(tz, start, end)`, `bulk_send(n)`, `first_time_recipient`.
+- **Human-in-the-loop approvers.** `SlackApproverCard` (Slack Block Kit buttons) and `WebhookApprover` (POST + callback). Starlette ASGI factory `parlok.hitl.approvals_app([...])` for the callback endpoint.
+- **Slack adapter.** `parlok.adapters.slack.SlackAdapter` policy-wraps `chat_postMessage`; other `WebClient` methods pass through.
+- **SQLite state + audit log.** Per-decision audit row, first-time recipient tracking, pending-approval persistence.
+- **CLI.** `parlok init` writes a starter `parlok.yaml`; `parlok lint` validates; `parlok test` shows decisions for sample ToolCalls.
 
-The 16-test suite under `tests/` pins this surface so future refactors can't silently break the public contract.
+The 91-test suite under `tests/` pins the surface and behaviour.
 
 ---
 
@@ -211,7 +211,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-Expected: 16 tests pass.
+Expected: 91 tests pass.
 
 ## Layout
 

@@ -20,6 +20,9 @@ dist/
 build/
 *.egg
 
+# parlok runtime state (SQLite) — created at process cwd
+.parlok/
+
 # Node / Next.js
 node_modules/
 .next/
