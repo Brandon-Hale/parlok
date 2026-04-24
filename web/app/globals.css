@@ -32,3 +32,21 @@ html, body {
 .parlok-pulse {
   animation: parlok-pulse 1.6s ease-in-out infinite;
 }
+
+@keyframes parlok-flow-dot {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.parlok-flow-dot {
+  animation: parlok-flow-dot 1.4s ease-in-out infinite;
+}
+
+@keyframes parlok-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(10, 10, 10, 0.12); }
+  60% { box-shadow: 0 0 0 6px rgba(10, 10, 10, 0); }
+}
+
+.parlok-ring {
+  animation: parlok-ring 2.2s ease-in-out infinite;
+}

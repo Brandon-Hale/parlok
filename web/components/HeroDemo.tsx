@@ -148,7 +148,7 @@ function PipelineNode({
       <div
         className={`rounded-md border px-5 py-2 font-mono text-sm ${
           active
-            ? "border-[var(--color-ink)] bg-white text-[var(--color-ink)]"
+            ? "border-[var(--color-ink)] bg-white text-[var(--color-ink)] parlok-ring"
             : "border-dashed border-[var(--color-hairline)] text-[var(--color-muted)]"
         }`}
       >
@@ -161,12 +161,16 @@ function PipelineNode({
   );
 }
 
-function Dots() {
+function Dots({ delayOffset = 0 }: { delayOffset?: number }) {
   return (
-    <div className="flex items-center gap-1 text-[var(--color-muted)]">
-      <span className="w-1 h-1 rounded-full bg-current" />
-      <span className="w-1 h-1 rounded-full bg-current" />
-      <span className="w-1 h-1 rounded-full bg-current" />
+    <div className="flex items-center gap-1.5 text-[var(--color-muted)]">
+      {[0, 0.2, 0.4].map((d, i) => (
+        <span
+          key={i}
+          className="w-1 h-1 rounded-full bg-current parlok-flow-dot"
+          style={{ animationDelay: `${d + delayOffset}s` }}
+        />
+      ))}
     </div>
   );
 }
@@ -293,7 +297,7 @@ export function HeroDemo() {
         <PipelineNode label="agent" sublabel="calls tool" />
         <Dots />
         <PipelineNode label="parlok" sublabel="evaluates" active />
-        <Dots />
+        <Dots delayOffset={0.6} />
         <PipelineNode label="tool" sublabel="executes" />
       </div>
 

@@ -40,7 +40,10 @@ export function HeroLanguageBadge() {
         onClick={() => setOpen((v) => !v)}
         className="inline-flex items-center gap-2.5 rounded-full border border-[var(--color-hairline)] bg-white px-4 py-1.5 font-mono text-xs hover:border-[var(--color-ink)]/30 transition"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+        <span className="relative inline-flex w-1.5 h-1.5" aria-hidden="true">
+          <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-60 parlok-pulse" />
+          <span className="relative inline-flex rounded-full w-1.5 h-1.5 bg-emerald-500" />
+        </span>
         <span className="text-[var(--color-ink)]">{active.label}</span>
         <span className="text-[var(--color-muted)]">· sdk v0 · preview</span>
         <svg

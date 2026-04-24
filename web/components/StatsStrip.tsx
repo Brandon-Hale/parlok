@@ -7,31 +7,27 @@ const STATS = [
 
 export function StatsStrip() {
   return (
-    <section className="border-y border-[var(--color-hairline)]">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-2 md:grid-cols-4">
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              className={[
-                "px-6 py-6 md:py-8",
-                i === 1 && "border-l border-[var(--color-hairline)]",
-                i === 2 && "border-t md:border-t-0 md:border-l border-[var(--color-hairline)]",
-                i === 3 && "border-t border-l md:border-t-0 border-[var(--color-hairline)]",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-            >
-              <div className="font-serif text-4xl md:text-5xl leading-none text-[var(--color-ink)]">
-                {s.value}
-              </div>
-              <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-muted)]">
-                {s.label}
-              </div>
+    <section className="mx-auto max-w-5xl px-6 py-5 border-y border-[var(--color-hairline)]">
+      <ul className="grid grid-cols-2 md:grid-cols-4 gap-y-5">
+        {STATS.map((s, i) => (
+          <li key={s.label} className="relative px-6 text-center">
+            {i > 0 && (
+              <span
+                aria-hidden="true"
+                className={`absolute left-0 top-1/2 -translate-y-1/2 h-8 w-px bg-[var(--color-hairline)] ${
+                  i === 2 ? "hidden md:block" : ""
+                }`}
+              />
+            )}
+            <div className="font-serif text-[2.25rem] leading-none text-[var(--color-ink)]">
+              {s.value}
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-muted)]">
+              {s.label}
+            </div>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
