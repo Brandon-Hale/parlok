@@ -1,0 +1,47 @@
+version: 1
+allowed_domains: [acme.com]
+vip_recipients: [ceo@acme.com]
+
+policies:
+  # 1. Destructive SQL is always denied (fail-closed on schema changes).
+  - name: block-drop-table
+    match:
+      adapter: postgres
+      action: execute
+    when: body.matches("(?i)\\bdrop\\s+table\\b")
+    decision: deny
+    reason: "Destructive schema change blocked."
+
+  # 2. Anything mentioning money going to an external recipient needs a human.
+  - name: approve-external-financial
+    match:
+      adapter: [slack, email]
+    when: recipient.is_external and financial_mention()
+    decision: approve
+    via: console
+    reason: "External financial message"
+
+  # 3. VIP messages need a human even internally.
+  - name: approve-vip
+    match:
+      adapter: email
+    when: recipient.is_vip
+    decision: approve
+    via: console
+    reason: "VIP recipient"
+
+  # 4. Everything else going out over Slack or email gets PII/secrets redacted.
+  - name: redact-outbound
+    match:
+      adapter: [slack, email]
+    decision: rewrite
+    transforms: [redact_pii, redact_secrets, clamp_length(500)]
+
+  # 5. Internal postgres reads — allow.
+  - name: allow-postgres-reads
+    match:
+      adapter: postgres
+      action: execute
+    decision: allow
+
+  # 6. Fail closed on anything unrecognised (implicit — no further policy).
