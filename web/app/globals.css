@@ -9,7 +9,7 @@
   --color-muted: #6b6b6b;
   --color-hairline: #e8e8e8;
   --color-surface: #fafafa;
-  --color-accent: #3b5bfd;
+  --color-accent: #2a4d7a;
 }
 
 html, body {
@@ -75,6 +75,23 @@ button:disabled {
 
 .parlok-caret {
   animation: parlok-caret 1s step-end infinite;
+}
+
+@keyframes parlok-float {
+  0%, 100% { transform: translateY(0) rotate(-0.6deg); }
+  50% { transform: translateY(-6px) rotate(0.6deg); }
+}
+
+.parlok-float {
+  display: inline-block;
+  transform-origin: center;
+  animation: parlok-float 4.5s ease-in-out infinite;
+  transition: transform 250ms ease-out;
+}
+
+.parlok-float:hover {
+  animation-play-state: paused;
+  transform: translateY(-6px) rotate(0) scale(1.03);
 }
 
 /* Markdown prose styles for /docs */
