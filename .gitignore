@@ -23,6 +23,9 @@ build/
 # parlok runtime state (SQLite) — created at process cwd
 .parlok/
 
+# hatch-vcs generated version file
+sdk/python/src/parlok/_version.py
+
 # Node / Next.js
 node_modules/
 .next/

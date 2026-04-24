@@ -211,7 +211,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-Expected: 91 tests pass.
+Expected: 92 tests pass.
 
 ## Layout
 
@@ -240,6 +240,32 @@ sdk/python/
 - **Fail closed on missing policy.** If the firewall can't evaluate a call, it doesn't get sent.
 - **Adapters are thin.** The interesting logic lives in the policy engine, not in adapter glue.
 - **No runtime dependencies in the core.** Adapters bring their own SDK as an optional extra.
+
+## Releasing
+
+Version is derived from git tags via `hatch-vcs`. To cut a release:
+
+```bash
+# from the repo root, on the main branch, with everything committed:
+git tag v0.1.1                # use a real SemVer; must match ^v\d+\.\d+\.\d+
+git push origin v0.1.1
+```
+
+The `Publish` GitHub Actions workflow (`.github/workflows/publish.yml`) fires
+on any `v*.*.*` tag push, builds an sdist + wheel from `sdk/python/`, runs the
+test suite against the built wheel, and uploads to PyPI via OIDC trusted
+publishing (no long-lived token required).
+
+One-time PyPI setup before the first tag:
+
+1. Publish v0.1.0 manually once (`python -m build && python -m twine upload
+   dist/*`) to register the project name.
+2. On the PyPI project page, Settings → Publishing → add a Trusted Publisher:
+   - Owner: `Brandon-Hale`, Repository: `parlok`
+   - Workflow filename: `publish.yml`
+   - Environment name: `pypi`
+
+After that, tag pushes publish automatically. No secrets live in GitHub.
 
 ## License
 

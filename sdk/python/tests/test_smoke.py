@@ -10,7 +10,9 @@ def test_public_surface_is_importable():
 
 
 def test_version_is_set():
-    assert parlok.__version__ == "0.1.0"
+    import re
+
+    assert re.match(r"^\d+\.\d+\.\d+", parlok.__version__), parlok.__version__
 
 
 def test_all_exports_match_dunder_all():
