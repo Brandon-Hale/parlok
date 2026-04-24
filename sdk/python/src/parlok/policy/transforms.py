@@ -14,6 +14,7 @@ _SSN_RE     = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
 _AWS_RE     = re.compile(r"\b(AKIA|ASIA)[0-9A-Z]{16}\b")
 _GH_RE      = re.compile(r"\bgh[pousr]_[A-Za-z0-9]{30,}\b")
 _SLACK_RE   = re.compile(r"\bxox[baprs]-[A-Za-z0-9\-]{10,}\b")
+_STRIPE_RE  = re.compile(r"\bsk_(?:live|test)_[A-Za-z0-9]{10,}\b")
 _BEARER_RE  = re.compile(r"\bBearer\s+[A-Za-z0-9\-_\.]+", re.IGNORECASE)
 _JWT_RE     = re.compile(r"\b[A-Za-z0-9\-_]{10,}\.[A-Za-z0-9\-_]{10,}\.[A-Za-z0-9\-_]{10,}\b")
 _URL_RE     = re.compile(r"https?://\S+")
@@ -36,7 +37,7 @@ def redact_pii(call: ToolCall) -> ToolCall:
 
 def redact_secrets(call: ToolCall) -> ToolCall:
     b = call.body
-    for pat in (_AWS_RE, _GH_RE, _SLACK_RE, _BEARER_RE, _JWT_RE):
+    for pat in (_AWS_RE, _GH_RE, _SLACK_RE, _STRIPE_RE, _BEARER_RE, _JWT_RE):
         b = _sub(b, pat, "[redacted-secret]")
     return replace(call, body=b)
 

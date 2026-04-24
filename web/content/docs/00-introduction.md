@@ -20,15 +20,20 @@ These are the kinds of failures you don't find out about in staging. You find ou
 
 ## The idea
 
-Every tool call flows through parlok before it hits the tool. A rule either **allows** it, **rewrites** it, parks it for **approval**, or **denies** it. Your agent code keeps running; your ops and security people keep the keys to the rule file.
+Every tool call flows through parlok before it hits the tool. A policy either **allows** it, **rewrites** it (scrubs the payload before sending), parks it for **approval**, or **denies** it. Your agent code keeps running; your ops and security people keep the keys to the rule file.
 
 ```yaml
-match:
-  adapter: postgres
-  args.sql: "*DROP*"
-  args.env: prod
-decision: deny
-reason: "schema drops forbidden in prod"
+version: 1
+policies:
+  - name: block-prod-drops
+    match:
+      adapter: postgres
+      action: execute
+    when: body.matches("(?i)\\bdrop\\s+table\\b")
+    decision: deny
+    reason: "Destructive schema change blocked."
 ```
 
-No new infrastructure. No bespoke policy language. Rules check into git, get reviewed in PRs, and live next to your application code.
+No new infrastructure. No bespoke policy language. Policies check into git, get reviewed in PRs, and live next to your application code.
+
+Policies are evaluated in order and fail closed: a call that matches no policy is denied by default.

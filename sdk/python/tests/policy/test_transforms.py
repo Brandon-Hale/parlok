@@ -27,6 +27,11 @@ def test_redact_secrets_github():
     assert "ghp_" not in out.body
 
 
+def test_redact_secrets_stripe():
+    out = apply_transforms(tc(body="use sk_live_9a2Xk12Jz4abcdefGHIJ today"), [("redact_secrets", [])])
+    assert "sk_live_" not in out.body
+
+
 def test_clamp_length_truncates():
     out = apply_transforms(tc(body="x" * 50), [("clamp_length", [10])])
     assert len(out.body) == 11

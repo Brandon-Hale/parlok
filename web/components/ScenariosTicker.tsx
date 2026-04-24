@@ -8,64 +8,64 @@ type Policy = {
 
 const POLICIES: Policy[] = [
   {
-    ruleName: "safe_channels",
+    ruleName: "redact-pii",
     decision: "REWRITE",
-    description: "#announce-* routed to #eng-test.",
+    description: "strip emails, phones, SSNs from outbound text.",
   },
   {
-    ruleName: "no_schema_drops",
-    decision: "DENY",
-    description: "DROP / TRUNCATE forbidden in prod.",
-  },
-  {
-    ruleName: "high_value_refunds",
-    decision: "APPROVE",
-    description: "refunds over $10k park for review.",
-  },
-  {
-    ruleName: "redact_secrets",
+    ruleName: "redact-secrets",
     decision: "REWRITE",
-    description: "mask sk_live_* tokens in outbound text.",
+    description: "mask AWS / GitHub / Slack / Stripe tokens.",
   },
   {
-    ruleName: "sms_otp_allowed",
-    decision: "ALLOW",
-    description: "OTP messages always pass through.",
+    ruleName: "block-prod-drops",
+    decision: "DENY",
+    description: "DROP TABLE refused before it reaches the DB.",
   },
   {
-    ruleName: "external_channel_posts",
+    ruleName: "approve-external",
     decision: "APPROVE",
-    description: "posts to external Slacks need a human.",
+    description: "external recipients need a human.",
   },
   {
-    ruleName: "financial_emails",
+    ruleName: "approve-vip",
     decision: "APPROVE",
-    description: "subject matches refund / wire / invoice.",
+    description: "messages to the VIP list need a human.",
   },
   {
-    ruleName: "clamp_email_length",
+    ruleName: "approve-financial",
+    decision: "APPROVE",
+    description: "currency amounts in body park for review.",
+  },
+  {
+    ruleName: "after-hours",
+    decision: "APPROVE",
+    description: "outbound outside business hours needs a human.",
+  },
+  {
+    ruleName: "bulk-send",
+    decision: "APPROVE",
+    description: "more than 25 recipients needs a human.",
+  },
+  {
+    ruleName: "first-time-recipient",
+    decision: "APPROVE",
+    description: "first contact with a new recipient needs a human.",
+  },
+  {
+    ruleName: "clamp-outbound",
     decision: "REWRITE",
-    description: "cap outbound emails at 2000 chars.",
+    description: "cap outbound messages at 2000 chars.",
   },
   {
-    ruleName: "dev_writes_allow",
-    decision: "ALLOW",
-    description: "env=dev writes pass unchecked.",
+    ruleName: "strip-urls",
+    decision: "REWRITE",
+    description: "remove links from outbound text.",
   },
   {
-    ruleName: "no_pii_in_urls",
-    decision: "DENY",
-    description: "block SSN / card numbers in query strings.",
-  },
-  {
-    ruleName: "rate_limit_posts",
-    decision: "DENY",
-    description: "more than 10 posts/min per channel.",
-  },
-  {
-    ruleName: "audit_all_db",
-    decision: "ALLOW",
-    description: "every query logged for review.",
+    ruleName: "tone-check",
+    decision: "REWRITE",
+    description: "downgrade ALLCAPS runs and mask profanity.",
   },
 ];
 

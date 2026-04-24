@@ -5,32 +5,39 @@ const PY_WRAP = `from parlok import Firewall
 from parlok.adapters.slack import SlackAdapter
 
 fw = Firewall.from_file("parlok.yaml")
-slack = fw.wrap(SlackAdapter())`;
+slack = fw.wrap(SlackAdapter(token=SLACK_TOKEN))`;
 
-const TS_WRAP = `import { Firewall } from "parlok";
-import { SlackAdapter } from "parlok/adapters/slack";
+const TS_WRAP = `// TypeScript SDK is on the roadmap.
+// The Python SDK is shipping in v0.1 — switch to the Python tab
+// to see working code.`;
 
-const fw = await Firewall.fromFile("parlok.yaml");
-const slack = fw.wrap(new SlackAdapter());`;
+const YAML_MATCH = `version: 1
+allowed_domains: [acme.com]
 
-const YAML_MATCH = `match:
-  adapter: slack
-  args.channel: "#announce-*"
-decision: rewrite
-rewrite:
-  args.channel: "#eng-test"`;
+policies:
+  - name: redact-outbound
+    match: { adapter: [slack, email] }
+    decision: rewrite
+    transforms: [redact_pii, redact_secrets]
+
+  - name: approve-external
+    match: { adapter: [slack, email] }
+    when: recipient.is_external
+    decision: approve
+    via: slack_card
+
+  - name: allow-internal
+    match: { adapter: [slack, email] }
+    decision: allow`;
 
 const PY_RUN = `await slack.chat_postMessage(
-    channel="#announce-all",
-    text="closed a deal",
+    channel="#eng",
+    text="leaked key: ghp_abcdef... — rotate it",
 )
-# → rewritten to #eng-test`;
+# → 'ghp_abcdef...' is redacted before Slack ever sees it`;
 
-const TS_RUN = `await slack.chatPostMessage({
-  channel: "#announce-all",
-  text: "closed a deal",
-});
-// → rewritten to #eng-test`;
+const TS_RUN = `// TypeScript SDK is on the roadmap.
+// Switch to the Python tab for working code.`;
 
 export async function CodeSnippet() {
   const [pyWrap, tsWrap, yamlMatch, pyRun, tsRun] = await Promise.all([
@@ -53,7 +60,7 @@ export async function CodeSnippet() {
     {
       number: "02",
       title: "Match",
-      caption: "Rules live in YAML, versioned in your repo, reviewed like code.",
+      caption: "Policies live in YAML, versioned in your repo, reviewed like code.",
       kind: "yaml",
       yaml: yamlMatch,
     },
@@ -84,7 +91,7 @@ export async function CodeSnippet() {
         <div className="flex md:items-end">
           <p className="font-mono text-sm text-[var(--color-muted)] leading-relaxed max-w-md">
             You keep writing agent code the way you already do. Parlok sits
-            between the agent and its tools, reading rules that live in your
+            between the agent and its tools, reading policies that live in your
             repo.
           </p>
         </div>
