@@ -4,8 +4,9 @@ const COLUMNS = [
   {
     title: "Product",
     links: [
-      { label: "how it works", href: "/#how-it-works" },
       { label: "scenarios", href: "/#scenarios" },
+      { label: "install", href: "/#install" },
+      { label: "how it works", href: "/#how-it-works" },
     ],
   },
   {
@@ -15,6 +16,7 @@ const COLUMNS = [
       { label: "getting started", href: "/docs/getting-started" },
       { label: "rules", href: "/docs/reference/rules" },
       { label: "adapters", href: "/docs/reference/adapters" },
+      { label: "decisions", href: "/docs/reference/decisions" },
     ],
   },
   {
