@@ -12,11 +12,11 @@ export function NavBar() {
           parlok
         </a>
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-7 font-mono text-sm text-[var(--color-muted)] whitespace-nowrap">
-          <a href="/#how-it-works" className="hover:text-[var(--color-ink)] transition">
-            how it works
-          </a>
           <a href="/#scenarios" className="hover:text-[var(--color-ink)] transition">
             scenarios
+          </a>
+          <a href="/#how-it-works" className="hover:text-[var(--color-ink)] transition">
+            how it works
           </a>
           <a href="/#install" className="hover:text-[var(--color-ink)] transition">
             install
