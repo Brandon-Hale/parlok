@@ -35,7 +35,13 @@ class WebhookApprover(Approver):
         self._futures: dict[str, asyncio.Future[ApprovalResult]] = {}
 
     async def request(self, call: ToolCall, policy_reason: str) -> ApprovalResult:
+        loop = asyncio.get_running_loop()
+        # Register the future BEFORE any await, so a racing resolver that sees
+        # the pending row always finds a future waiting for it.
         pid = self._store.create_pending(call.adapter, call.action, call.recipient, call.body)
+        fut: asyncio.Future[ApprovalResult] = loop.create_future()
+        self._futures[pid] = fut
+
         payload = {
             "pending_id": pid, "reason": policy_reason,
             "call": {
@@ -44,10 +50,8 @@ class WebhookApprover(Approver):
                 "metadata": call.metadata,
             },
         }
-        await asyncio.get_running_loop().run_in_executor(None, self._post, self._url, payload)
-        fut: asyncio.Future[ApprovalResult] = asyncio.get_running_loop().create_future()
-        self._futures[pid] = fut
         try:
+            await loop.run_in_executor(None, self._post, self._url, payload)
             return await asyncio.wait_for(fut, timeout=self._timeout)
         except asyncio.TimeoutError:
             self._store.resolve_pending(pid, "timeout", None, None)

@@ -33,17 +33,21 @@ class SlackApproverCard(Approver):
         ]
 
     async def request(self, call: ToolCall, policy_reason: str) -> ApprovalResult:
+        loop = asyncio.get_running_loop()
+        # Register the future BEFORE any await, so a racing resolver that sees
+        # the pending row always finds a future waiting for it.
         pid = self._store.create_pending(call.adapter, call.action, call.recipient, call.body)
-        blocks = self._build_blocks(pid, call, policy_reason)
-        await asyncio.get_running_loop().run_in_executor(
-            None,
-            lambda: self._client.chat_postMessage(
-                channel=self._channel, blocks=blocks, text="parlok approval"
-            ),
-        )
-        fut: asyncio.Future[ApprovalResult] = asyncio.get_running_loop().create_future()
+        fut: asyncio.Future[ApprovalResult] = loop.create_future()
         self._futures[pid] = fut
+
+        blocks = self._build_blocks(pid, call, policy_reason)
         try:
+            await loop.run_in_executor(
+                None,
+                lambda: self._client.chat_postMessage(
+                    channel=self._channel, blocks=blocks, text="parlok approval"
+                ),
+            )
             return await asyncio.wait_for(fut, timeout=self._timeout)
         except asyncio.TimeoutError:
             self._store.resolve_pending(pid, "timeout", None, None)
