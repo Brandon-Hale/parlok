@@ -82,6 +82,26 @@ button:disabled {
   animation: parlok-caret 1s step-end infinite;
 }
 
+@keyframes parlok-ticker {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.parlok-ticker {
+  animation: parlok-ticker 80s linear infinite;
+  will-change: transform;
+}
+
+.parlok-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parlok-ticker {
+    animation: none;
+  }
+}
+
 @keyframes parlok-float {
   0%, 100% { transform: translateY(0) rotate(-0.6deg); }
   50% { transform: translateY(-6px) rotate(0.6deg); }

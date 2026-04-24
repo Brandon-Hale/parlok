@@ -37,7 +37,7 @@ export async function InstallSection() {
           </p>
           <div className="mt-8 flex items-center gap-5">
             <a
-              href="#"
+              href="/docs/getting-started"
               className="inline-flex items-center rounded-md bg-[var(--color-ink)] px-5 py-2.5 font-mono text-xs text-[var(--color-surface)] hover:opacity-90 transition"
             >
               read the quickstart →
