@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { ok: false, error: "Too many requests — slow down." },
+      { ok: false, error: "Too many requests. Slow down." },
       { status: 429 },
     );
   }
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
       unsubscribed: false,
     });
 
-    // Resend returns an error shape for duplicates (status 422) — treat as success
+    // Resend returns an error shape for duplicates (status 422); treat as success
     // so we don't leak whether the email is already on the list.
     if (result.error && result.error.name !== "validation_error") {
       console.error("[waitlist] Resend error:", result.error);

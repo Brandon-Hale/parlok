@@ -34,35 +34,40 @@ export function WaitlistForm() {
 
   if (status === "success") {
     return (
-      <p className="text-sm text-[var(--color-muted)]">
-        Thanks, you&apos;re in. We&apos;ll be in touch.
+      <p className="font-mono text-sm text-[var(--color-muted)]">
+        thanks, you&apos;re in. we&apos;ll be in touch.
       </p>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2 w-full max-w-md">
-      <input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@company.com"
-        disabled={status === "loading"}
-        className="flex-1 px-4 py-2.5 rounded-md border border-[var(--color-hairline)] bg-white text-sm placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none transition disabled:opacity-60"
-      />
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        className="px-5 py-2.5 rounded-md bg-[var(--color-ink)] text-[var(--color-surface)] text-sm font-medium hover:opacity-90 transition disabled:opacity-60"
+    <div className="w-full">
+      <form
+        onSubmit={onSubmit}
+        className="flex items-center w-full rounded-lg border border-[var(--color-hairline)] bg-white p-2 focus-within:border-[var(--color-ink)]/30 transition"
       >
-        {status === "loading" ? "Joining…" : "Join waitlist"}
-      </button>
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@company.com"
+          disabled={status === "loading"}
+          className="flex-1 min-w-0 px-4 py-2 bg-transparent font-mono text-sm placeholder:text-[var(--color-muted)] outline-none disabled:opacity-60"
+        />
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="shrink-0 px-4 py-2 rounded-md bg-[var(--color-ink)] text-[var(--color-surface)] font-mono text-sm hover:opacity-90 transition disabled:opacity-60 whitespace-nowrap"
+        >
+          {status === "loading" ? "joining…" : "join waitlist →"}
+        </button>
+      </form>
       {error && (
-        <p role="alert" className="text-xs text-red-600 sm:absolute sm:mt-14">
+        <p role="alert" className="mt-2 font-mono text-xs text-red-600">
           {error}
         </p>
       )}
-    </form>
+    </div>
   );
 }

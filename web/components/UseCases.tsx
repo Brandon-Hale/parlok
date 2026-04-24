@@ -24,11 +24,22 @@ const cases = [
 
 export function UseCases() {
   return (
-    <section className="mx-auto max-w-5xl px-6 py-24">
-      <div className="mb-10">
-        <span className="font-mono text-xs tracking-widest uppercase text-[var(--color-muted)]">
-          What parlok stops
-        </span>
+    <section id="scenarios" className="mx-auto max-w-6xl px-6 py-28 scroll-mt-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 mb-12">
+        <div>
+          <span className="font-mono text-xs tracking-widest uppercase text-[var(--color-muted)]">
+            Real failure modes
+          </span>
+          <h2 className="mt-4 font-serif text-4xl sm:text-5xl leading-[1.05] tracking-tight text-[var(--color-ink)]">
+            The things that go wrong at 3am.
+          </h2>
+        </div>
+        <div className="flex md:items-end">
+          <p className="text-base text-[var(--color-muted)] leading-relaxed max-w-md">
+            Every rule here is three lines of Python. No YAML, no policy
+            language, no vendor lock-in.
+          </p>
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {cases.map((c) => (
