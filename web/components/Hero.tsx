@@ -37,9 +37,13 @@ export function Hero() {
         <div className="flex flex-col items-start">
           <HeroLanguageBadge />
           <h1 className="font-serif text-6xl sm:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[var(--color-ink)]">
-            Guardrails
-            <br />
-            for <em className="italic parlok-float text-[var(--color-accent)]">agents.</em>
+            <span className="block">Guardrails</span>
+            <span className="block">
+              for{" "}
+              <em className="italic parlok-float text-[var(--color-accent)]">
+                agents.
+              </em>
+            </span>
           </h1>
           <p className="mt-8 text-lg text-[var(--color-muted)] max-w-xl leading-relaxed min-h-[4.5em]">
             <TypingCycle
